@@ -1,0 +1,27 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 512px;
+    height: 550px;
+    cursor: pointer;
+
+    .mark {
+        height: 512px;
+        background-image: url('../img/dog404.png');
+        background-size: 100% 100%;
+    }
+
+    .mark-des {
+        font-size: 30px;
+        text-align: center;
+        font-weight: 500;
+    }
+}

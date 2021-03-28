@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>GoFile</title>
+    </head>
+    <body>
+        <section class="section" id="app">
+            <div class="container">
+                <div class="columns">
+                    <div class="column"></div>
+                    <div class="column">
+                        <div @click="wangwang" id="logo"></div>
+                    </div>
+                    <div class="column">
+                        <span id="logo-title">GoFile</span>
+                        <span id="logo-subtile">Share your files anonymously</span>
+                        <a id="logo-ref" href="https://github.com/ecator/gofile" target="_blank" class="icon-text">
+                            <span>via</span>
+                            <span class="icon">
+                              <i class="fab fa-github-alt"></i>
+                            </span>
+                            <span>Martin</span>
+                        </a>
+                    </div>
+                    <div class="column"></div>
+                </div>
+                <div class="columns">
+                    <div class="column"></div>
+                    <div class="column is-two-thirds">
+                        <div class="file has-name" id="file-selector">
+                            <label class="file-label">
+                                <input class="file-input" type="file"
+                                    :disabled="isUploading"
+                                    name="resume" id="file-pseudo"
+                                    @change="syncFilename">
+                                <span v-if="!isUploading" class="file-cta">
+                                    <span class="file-icon">
+                                        <i class="fas fa-upload"></i>
+                                    </span>
+                                    <span class="file-label">
+                                        Choose a file…
+                                    </span>
+                                </span>
+                                <button v-else class="button is-warning
+                                    is-loading">Loading</button>
+                                <span class="file-name" id="file-name">
+                                    {{ fileName }}
+                                </span>
+                            </label>
+                        </div>
+                        <div id="progress"><div class="progress-value"
+                                :style="{width: fileUploadPercent}">{{
+                                fileUploadPercent }}</div><div
+                                class="progress-label">{{ fileSizeHuman }}</div></div>
+                    </div>
+                    <div class="column"></div>
+                </div>
+                <div class="columns">
+                    <div class="column"></div>
+                    <div class="column is-two-thirds">
+                        <table id="file-list" class="table is-fullwidth is-striped">
+                            <thead><tr><th>fileName</th><th>size</th><th>countDown</th><th>URL</th></tr></thead>
+                            <tbody>
+                                <tr v-for="file in fileList">
+                                    <td>{{ file.fileName }}</td>
+                                    <td>{{ getHumanFileSize(file.size) }}</td>
+                                    <td> {{ getCountDown(file.expireTimestamp) }} </td>
+                                    <td>
+                                        <div class="buttons">
+                                            <button @click="copyURL(file.token)" class="button is-small is-primary is-light">copy</button>
+                                            <button @click="openURL(file.token)" class="button is-small is-link is-light">open</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="column"></div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

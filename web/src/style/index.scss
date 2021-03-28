@@ -1,0 +1,76 @@
+html {
+    overflow-y: auto;
+}
+
+
+#logo {
+    background-image: url("../img/dog.png");
+    background-size: 100% 100%;
+    width: 150px;
+    height: 150px;
+    margin: auto;
+    cursor: pointer;
+}
+
+.log-common {
+    margin: auto;
+    display: block;
+    font-style: italic;
+}
+
+#logo-title {
+    @extend .log-common;
+    font-size: 56px;
+    font-weight: 500;
+    display: block;
+}
+
+#logo-subtile {
+    @extend .log-common;
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 200;
+}
+
+#logo-ref {
+    @extend .log-common;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 300;
+
+    .icon {
+        margin-right: -4px;
+        vertical-align: bottom;
+    }
+}
+
+#file-selector {
+    .file-label {
+        width: 100%;
+
+        .file-name {
+            max-width: inherit;
+            flex: 1 0 0;
+        }
+    }
+}
+
+#progress {
+    font-size: 16px;
+    text-align: center;
+    background-color: #eeeeee;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+
+    .progress-value {
+        background-color: #00d1b2;
+        text-align: left;
+    }
+
+    .progress-label {
+        position: absolute;
+        left: 50%;
+        top: 0;
+    }
+}
