@@ -1,4 +1,4 @@
-# GoFile
+# GoFile ![build status](https://github.com/ecator/gofile/actions/workflows/build.yml/badge.svg)
 
 一个匿名分享文件的工具，采用B/S架构，用户上传文件后会生成一个URL，通过这个URL可以下载文件，文件会在过期后自动从服务器物理删除，减少服务器的储存压力。
 
