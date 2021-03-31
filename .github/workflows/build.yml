@@ -36,8 +36,8 @@ jobs:
       name: Get tag
       id: tag
       uses: dawidd6/action-get-tag@v1
-    - if: ${{ startsWith(github.ref,'refs/tags/'') }}
-      ame: Update release
+    - if: ${{ startsWith(github.ref,'refs/tags/') }}
+      name: Update release
       uses: johnwbyrd/update-release@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
