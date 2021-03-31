@@ -35,7 +35,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: dist
-        path: dstt/*.tar.xz
+        path: dist/*.tar.xz
 
   build-mac:
     runs-on: macos-latest
@@ -64,7 +64,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: dist
-        path: dstt/*.tar.xz
+        path: dist/*.tar.xz
 
   release:
     needs: [build-linux,build-mac]
