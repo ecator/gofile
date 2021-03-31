@@ -41,7 +41,7 @@ jobs:
       uses: johnwbyrd/update-release@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        files: ${{ format('GoFile-{0}-Linux-x86_64.tar.xz',steps.tag.outputs.tag}}
+        files: ${{ format('GoFile-{0}-Linux-x86_64.tar.xz',steps.tag.outputs.tag) }}
 
   build-mac:
     runs-on: macos-latest
