@@ -8,7 +8,7 @@
     </head>
     <body>
         <section class="section" id="app">
-            <div class="container">
+            <div class="container" @dragenter="fileDragEnter" @dragover="fileDragOver" @drop="fileDrop">
                 <div class="columns">
                     <div class="column"></div>
                     <div class="column">
@@ -35,13 +35,14 @@
                                 <input class="file-input" type="file"
                                     :disabled="isUploading"
                                     name="resume" id="file-pseudo"
-                                    @change="syncFilename">
+                                    multiple
+                                    @change="uploadFile">
                                 <span v-if="!isUploading" class="file-cta">
                                     <span class="file-icon">
                                         <i class="fas fa-upload"></i>
                                     </span>
                                     <span class="file-label">
-                                        Choose a file…
+                                        Choose or drap files…
                                     </span>
                                 </span>
                                 <button v-else class="button is-warning
@@ -62,7 +63,7 @@
                     <div class="column"></div>
                     <div class="column is-two-thirds">
                         <table id="file-list" class="table is-fullwidth is-striped">
-                            <thead><tr><th>fileName</th><th>size</th><th>countDown</th><th>URL</th></tr></thead>
+                            <thead><tr><th>name</th><th>size</th><th>countdown</th><th>download</th></tr></thead>
                             <tbody>
                                 <tr v-for="file in fileList">
                                     <td>{{ file.fileName }}</td>
@@ -70,8 +71,9 @@
                                     <td> {{ getCountDown(file.expireTimestamp) }} </td>
                                     <td>
                                         <div class="buttons">
-                                            <button @click="copyURL(file.token)" class="button is-small is-primary is-light">copy</button>
-                                            <button @click="openURL(file.token)" class="button is-small is-link is-light">open</button>
+                                            <button @click="copyURL(file.token)" class="button is-small is-primary is-light">url</button>
+                                            <button @click="copyMD(file.fileName,file.token)" class="button is-small is-info is-light">markdown</button>
+                                            <button @click="openURL(file.token)" class="button is-small is-warning is-light">open</button>
                                         </div>
                                     </td>
                                 </tr>

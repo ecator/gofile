@@ -8,33 +8,41 @@ import copyToClipboard from './clipboard';
 import wangwangAudio from '../audio/wangwang.mp3';
 
 let app;
-function upload(fileInput) {
-    let fd = new FormData();
-    fd.append("file", fileInput.files[0]);
-    axios({
-        method: "post",
-        url: "file",
-        data: fd,
-        onUploadProgress: function (event) {
-            //console.log(event);
-            if (event.lengthComputable) {
-                app.fileUploadSize = event.loaded;
+async function upload(files) {
+    app.isUploading = true;
+    for (let i = 0; i < files.length; i++) {
+        let file = files[i];
+        let fd = new FormData();
+        fd.append("file", file);
+        app.fileSize = file.size;
+        app.fileUploadSize = 0;
+        app.fileName = file.name + " (" + (i + 1) + "/" + files.length + ")"
+        try {
+            let res = await axios({
+                method: "post",
+                url: "file",
+                data: fd,
+                onUploadProgress: function (event) {
+                    //console.log(event);
+                    if (event.lengthComputable) {
+                        app.fileUploadSize = event.loaded;
+                    }
+                    else {
+                        alert('unable to compute');
+                    }
+                }
+            });
+            if (res.data.code != 0) {
+                alert(res.data.result);
+            } else {
+                // 添加上传的文件信息
+                app.fileList.unshift(res.data.result)
             }
-            else {
-                alert('unable to compute');
-            }
+        } catch (err) {
+            alert(err);
         }
-    }).then(res => {
-        if (res.data.code != 0) {
-            alert(res.data.result);
-        } else {
-            // 添加上传的文件信息
-            app.fileList.unshift(res.data.result)
-        }
-        app.isUploading = false;
-    }).catch(err => {
-        console.log(err);
-    });
+    }
+    app.isUploading = false;
 }
 
 function updateFileList() {
@@ -97,22 +105,15 @@ function init() {
                     alert("🐶wangwang!!");
                 };
             },
-            syncFilename(event) {
+            uploadFile(event) {
                 //console.log(event);
                 let target = event.target;
                 let files;
                 if (target) {
                     files = target.files;
                 }
-                let file;
-                if (files.length > 0) {
-                    file = files[0];
-                }
-                if (file) {
-                    this.fileName = file.name;
-                    this.fileSize = file.size;
-                    this.isUploading = true;
-                    upload(target);
+                if (files && files.length > 0) {
+                    upload(files);
                 } else {
                     this.fileName = "";
                     this.fileSize = 0;
@@ -123,6 +124,10 @@ function init() {
             copyURL(token) {
                 let url = location.href + "file/" + token;
                 copyToClipboard(url);
+            },
+            copyMD(name,token) {
+                let md = `[${name}](${location.href}file/${token})`;
+                copyToClipboard(md);
             },
             openURL(token) {
                 let url = location.href + "file/" + token;
@@ -151,6 +156,50 @@ function init() {
                 let m = `0${parseInt((t % 3600) / 60)}`.substr(-2);
                 let s = `0${(t % 3600) % 60}`.substr(-2);
                 return `${h}:${m}:${s}`;
+            },
+            fileDragEnter(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                if(this.isUploading){
+                    alert("You can't drag files when uploding...");
+                }
+            },
+            fileDragOver(event) {
+                event.preventDefault();
+                event.stopPropagation();
+            },
+            fileDrop(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                if(this.isUploading){
+                    return;
+                }
+                // 去掉目录
+                (async (files) => {
+                    let targets = [];
+                    let isFile = false;
+                    for (let file of files) {
+                        try {
+                            isFile = await new Promise((resolve, reject) => {
+                                let reader = new FileReader();
+                                reader.onload = () => {
+                                    resolve(true);
+                                };
+                                reader.onerror = () => {
+                                    resolve(false);
+                                };
+                                reader.readAsArrayBuffer(file.slice(0, file.size <= 10 ? file.size : 10));
+                            });
+                        } catch (error) {
+                            isFile = false;
+                        }
+                        if (isFile) {
+                            targets.push(file);
+                        }
+                    }
+                    return targets;
+                })(event.dataTransfer.files)
+                    .then(files => upload(files));
             }
         }
     });
