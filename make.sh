@@ -10,6 +10,10 @@ then
 fi
 
 platform=`uname -p`
+if [ "$platform" == "unknown" ]
+then
+  platform=`uname -m`
+fi
 kernel=`uname -s`
 
 target_dir="GoFile-${tag}-${kernel}-${platform}"
