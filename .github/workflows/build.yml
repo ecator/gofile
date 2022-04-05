@@ -24,7 +24,9 @@ jobs:
       run: go mod tidy
     
     - name: Setup Node.js environment
-      uses: actions/setup-node@v2.1.5
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
     
     - name: Prepare Node.js dependencies
       run: cd web && npm i && cd ..
@@ -53,7 +55,9 @@ jobs:
       run: go mod tidy
     
     - name: Setup Node.js environment
-      uses: actions/setup-node@v2.1.5
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
     
     - name: Prepare Node.js dependencies
       run: cd web && npm i && cd ..
