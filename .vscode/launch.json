@@ -10,7 +10,7 @@
             "type": "go",
             "debugAdapter": "dlv-dap", // `legacy` by default
             "request": "attach",
-            "mode": "remote", // rm -rf datadir && ~/go/bin/dlv debug $PWD --headless --listen=:12345 --check-go-version=false
+            "mode": "remote", // rm -rf datadir && dlv debug $PWD --headless --listen=:12345
             "port": 12345,
             "host": "127.0.0.1", // can skip for localhost
             "substitutePath": []
