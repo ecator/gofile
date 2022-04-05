@@ -1,8 +1,8 @@
 FROM docker/dev-environments-default:stable-1
 
-ARG GODOWNLOADURL=https://go.dev/dl/go1.15.linux-amd64.tar.gz
+ARG GODOWNLOADURL=https://go.dev/dl/go1.18.linux-amd64.tar.gz
 ARG GODOWNLOADTEMPFILE=/tmp/go.tar.gz
-ENV PATH=$PATH:/usr/local/go/bin
+ENV PATH=$PATH:/usr/local/go/bin:~/go/bin
 ENV LANG=C.UTF-8
 
 RUN apt update \ 
