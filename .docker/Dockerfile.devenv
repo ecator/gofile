@@ -1,12 +1,11 @@
-FROM ubuntu:20.04
+FROM docker/dev-environments-default:stable-1
 
-ARG GODOWNLOADURL=https://go.dev/dl/go1.18.linux-amd64.tar.gz
+ARG GODOWNLOADURL=https://go.dev/dl/go1.15.linux-amd64.tar.gz
 ARG GODOWNLOADTEMPFILE=/tmp/go.tar.gz
 ENV PATH=$PATH:/usr/local/go/bin
 ENV LANG=C.UTF-8
 
 RUN apt update \ 
-    && apt install -y curl tar git sudo \
     && curl -L $GODOWNLOADURL  -o $GODOWNLOADTEMPFILE \
     && rm -rf /usr/local/go && tar -C /usr/local -xzf $GODOWNLOADTEMPFILE \
     && rm -rf $GODOWNLOADTEMPFILE \
@@ -14,9 +13,4 @@ RUN apt update \
     && apt install -y nodejs \
     && apt clean
 
-RUN useradd -s /bin/bash -m vscode \
- && groupadd docker \
- && usermod -aG docker vscode
-
-USER vscode
-
+RUN echo "alias ll='ls -ahl --color'" >> /etc/bash.bashrc
