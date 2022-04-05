@@ -125,13 +125,49 @@ function init() {
                 let url = location.href + "file/" + token;
                 copyToClipboard(url);
             },
-            copyMD(name,token) {
+            copyMD(name, token) {
                 let md = `[${name}](${location.href}file/${token})`;
                 copyToClipboard(md);
             },
             openURL(token) {
                 let url = location.href + "file/" + token;
                 open(url);
+            },
+            delFile(name, token) {
+                if (!confirm(`delete ${name} ?`)) {
+                    return;
+                }
+                let url = location.href + "file/" + token;
+                axios.delete(url)
+                    .then((res) => {
+                        if (res.data.code == 0) {
+                            updateFileList();
+                            alert(`delete ${name} ok`);
+                        } else {
+                            alert(`delete ${name} failed`);
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            },
+            expandFileExpireTimestamp(name, token, expireTimestamp) {
+                if (!confirm(`expand expireTime of ${name} to ${this.getCountDown(expireTimestamp)} ?`)) {
+                    return;
+                }
+                let url = location.href + "file/" + token;
+                axios.put(url, new URLSearchParams({ expireTimestamp: expireTimestamp }))
+                    .then((res) => {
+                        if (res.data.code == 0) {
+                            updateFileList();
+                            alert(`expand expireTime of ${name} ok`);
+                        } else {
+                            alert(`expand expireTime of ${name} failed`);
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
             },
             getHumanFileSize(fileSize) {
                 if (fileSize < 1024) {
@@ -160,7 +196,7 @@ function init() {
             fileDragEnter(event) {
                 event.preventDefault();
                 event.stopPropagation();
-                if(this.isUploading){
+                if (this.isUploading) {
                     alert("You can't drag files when uploding...");
                 }
             },
@@ -171,7 +207,7 @@ function init() {
             fileDrop(event) {
                 event.preventDefault();
                 event.stopPropagation();
-                if(this.isUploading){
+                if (this.isUploading) {
                     return;
                 }
                 // 去掉目录

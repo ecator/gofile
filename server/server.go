@@ -39,6 +39,8 @@ func StartServer(si ServerInfo) {
 
 	// file
 	router.GET("/file/:token", handleFileDown)
+	router.DELETE("/file/:token", handleFileDel)
+	router.PUT("/file/:token", handleFileExpireTimestamp)
 	router.POST("/file", handleFileUp)
 	router.GET("/file", handleFileInfos)
 

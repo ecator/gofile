@@ -126,3 +126,48 @@ func handleFileInfos(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 
 	resJson(w, jData)
 }
+
+// 根据文件token删除文件
+func handleFileDel(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	token := getToken(w, r)
+	fileToken := ps.ByName("token")
+	var fileInfo interface{}
+	jData := new(jsonData)
+	jData.Code = 0
+	if delFile(fileToken) {
+		fileInfo = fileMap[fileToken]
+		delFileInfo(token, fileToken)
+	} else {
+		jData.Code = 404
+		fileInfo = "not found"
+	}
+	jData.Result = fileInfo
+	resJson(w, jData)
+}
+
+// 根据文件token设置过期时间戳
+func handleFileExpireTimestamp(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	fileToken := ps.ByName("token")
+	r.ParseForm()
+	expireTimestampStr := r.Form.Get("expireTimestamp")
+	jData := new(jsonData)
+	jData.Code = 0
+	jData.Result = "ok"
+	expireTimestamp := 0
+	var err error
+	if expireTimestampStr != "" {
+		expireTimestamp, err = strconv.Atoi(expireTimestampStr)
+		if err != nil {
+			jData.Code = 500
+			jData.Result = err.Error()
+		}
+	}
+	if err == nil {
+		if setFileExpireTimestamp(fileToken, int64(expireTimestamp)) == false {
+			jData.Code = 404
+			jData.Result = "not found"
+		}
+	}
+
+	resJson(w, jData)
+}

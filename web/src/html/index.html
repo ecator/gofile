@@ -63,7 +63,7 @@
                     <div class="column"></div>
                     <div class="column is-two-thirds">
                         <table id="file-list" class="table is-fullwidth is-striped">
-                            <thead><tr><th>name</th><th>size</th><th>countdown</th><th>download</th></tr></thead>
+                            <thead><tr><th>name</th><th>size</th><th>countdown</th><th>operation</th></tr></thead>
                             <tbody>
                                 <tr v-for="file in fileList">
                                     <td>{{ file.fileName }}</td>
@@ -74,6 +74,8 @@
                                             <button @click="copyURL(file.token)" class="button is-small is-primary is-light">url</button>
                                             <button @click="copyMD(file.fileName,file.token)" class="button is-small is-info is-light">markdown</button>
                                             <button @click="openURL(file.token)" class="button is-small is-warning is-light">open</button>
+                                            <button @click="expandFileExpireTimestamp(file.fileName,file.token,file.expireTimestamp+3600*24*1000)" class="button is-small is-success is-light">+1day</button>
+                                            <button @click="delFile(file.fileName,file.token)" class="button is-small is-danger is-light">del</button>
                                         </div>
                                     </td>
                                 </tr>

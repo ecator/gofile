@@ -63,6 +63,18 @@ func delFile(fileToken string) bool {
 	}
 }
 
+// 设置文件的过期时间戳，单位毫秒
+func setFileExpireTimestamp(fileToken string, expireTimestamp int64) bool {
+	fileInfo, ok := fileMap[fileToken]
+	if ok {
+		fileInfo.ExpireTimestamp = expireTimestamp
+		fileMap[fileToken] = fileInfo
+		return true
+	} else {
+		return false
+	}
+}
+
 // 遍历回收过期的文件
 func fileCollect() {
 	for userToken, fileTokens := range tokenMap {
